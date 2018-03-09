@@ -2,6 +2,7 @@
   "name": "passbolt/passbolt_selenium_api",
   "description": "Passbolt selenium testing helper endpoints",
   "type": "cakephp-plugin",
+  "version": "2.0",
   "keywords": [
     "password",
     "passbolt",
