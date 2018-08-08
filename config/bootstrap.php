@@ -20,6 +20,7 @@ use Cake\Core\Configure\Engine\PhpConfig;
  * This allow redefining server config on the fly when running integration tests
  */
 if (Configure::read('debug') && Configure::read('passbolt.selenium.active')) {
+    Configure::load('PassboltSeleniumApi.config', 'default', true);
     if (file_exists(TMP . 'selenium' . DS . 'core_extra_config.php')) {
         Configure::config('extra_config', new PhpConfig(TMP . 'selenium' . DS));
         Configure::load('core_extra_config', 'extra_config', true);
