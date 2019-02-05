@@ -12,15 +12,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.0.0
  */
-
-namespace App\Test\TestCase\Controller\SeleniumTests;
+namespace PassboltSeleniumApi\Test\TestCase\Controller\SeleniumTests;
 
 use App\Test\Lib\AppIntegrationTestCase;
 use Cake\Core\Configure;
 
 class SimulateErrorsControllerTest extends AppIntegrationTestCase
 {
-    public $fixtures = ['app.Base/users'];
+    public $fixtures = ['app.Base/Users'];
 
     public function testSimulateError404()
     {

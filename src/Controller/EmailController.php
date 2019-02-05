@@ -17,8 +17,8 @@ namespace PassboltSeleniumApi\Controller;
 use App\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\Network\Exception\HttpException;
-use Cake\Network\Exception\NotFoundException;
+use Cake\Http\Exception\HttpException;
+use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validation;
 
@@ -56,7 +56,7 @@ class EmailController extends AppController
             throw new HttpException(__('Username not correct'));
         }
         // If username doesn't exist, we return an error.
-        $Users = TableRegistry::get('Users');
+        $Users = TableRegistry::getTableLocator()->get('Users');
         $u = $Users->find('all')
             ->where(['username' => $username])
             ->first();
@@ -65,7 +65,7 @@ class EmailController extends AppController
         if (empty($u)) {
             throw new HttpException(__('The username does not exist.'));
         }
-        $EmailQueue = TableRegistry::get('EmailQueue.EmailQueue');
+        $EmailQueue = TableRegistry::getTableLocator()->get('EmailQueue.EmailQueue');
         $email = $EmailQueue->find('all')
             ->where(['email' => $username])
             ->order(['created' => 'DESC'])
