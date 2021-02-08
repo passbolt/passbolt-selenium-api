@@ -16,7 +16,7 @@ namespace PassboltSeleniumApi\Controller;
 
 use App\Controller\AppController;
 use Cake\Core\Configure;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\HttpException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
@@ -27,13 +27,13 @@ class EmailController extends AppController
     /**
      * Before filter
      *
-     * @param Event $event An Event instance
+     * @param \Cake\Event\EventInterface $event An Event instance
      * @return \Cake\Http\Response|null
      */
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
         if (Configure::read('debug') && Configure::read('passbolt.selenium.active')) {
-            $this->Auth->allow('showLastEmail');
+            $this->Authentication->allowUnauthenticated(['showLastEmail']);
         } else {
             throw new NotFoundException();
         };
