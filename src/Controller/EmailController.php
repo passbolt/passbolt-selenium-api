@@ -81,8 +81,8 @@ class EmailController extends AppController
 
         $this->viewBuilder()
             ->setLayout('default')
-            ->setLayoutPath("Email/$format")
+            ->setLayoutPath("email/$format")
             ->setTemplate($email->template)
-            ->setTemplatePath("Email/$format");
+            ->setTemplatePath("email/$format");
     }
 }
