@@ -17,7 +17,8 @@ namespace PassboltSeleniumApi\Controller;
 use App\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\Network\Exception\NotFoundException;
+use Cake\Event\EventInterface;
+use Cake\Http\Exception\NotFoundException;
 
 class ConfigController extends AppController
 {
@@ -31,15 +32,17 @@ class ConfigController extends AppController
     /**
      * Before filter
      *
-     * @param Event $event An Event instance
+     * @param \Cake\Event\EventInterface $event An Event instance
      * @return \Cake\Http\Response|null
      */
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
         if (Configure::read('debug') && Configure::read('passbolt.selenium.active')) {
-            $this->Auth->allow('setExtraConfig');
-            $this->Auth->allow('resetExtraConfig');
-            $this->Auth->allow('index');
+            $this->Authentication->allowUnauthenticated([
+                'setExtraConfig',
+                'resetExtraConfig',
+                'index'
+            ]);
         } else {
             throw new NotFoundException();
         };

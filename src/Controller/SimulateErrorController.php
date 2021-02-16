@@ -15,7 +15,7 @@
 namespace PassboltSeleniumApi\Controller;
 
 use App\Controller\AppController;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\InternalErrorException;
@@ -26,15 +26,17 @@ class SimulateErrorController extends AppController
     /**
      * Before filter
      *
-     * @param Event $event An Event instance
+     * @param \Cake\Event\EventInterface $event An Event instance
      * @return \Cake\Http\Response|null
      */
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
-        $this->Auth->allow('error404');
-        $this->Auth->allow('error403');
-        $this->Auth->allow('error400');
-        $this->Auth->allow('error500');
+        $this->Authentication->allowUnauthenticated([
+            'error404',
+            'error403',
+            'error400',
+            'error500',
+        ]);
 
         return parent::beforeFilter($event);
     }

@@ -19,8 +19,6 @@ use Cake\Core\Configure;
 
 class SimulateErrorsControllerTest extends AppIntegrationTestCase
 {
-    public $fixtures = ['app.Base/Users'];
-
     public function testSimulateError404()
     {
         $this->getJson('/seleniumtests/error404.json');

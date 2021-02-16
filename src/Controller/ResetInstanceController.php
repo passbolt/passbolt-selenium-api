@@ -15,21 +15,22 @@
 namespace PassboltSeleniumApi\Controller;
 
 use App\Controller\AppController;
-use App\Shell\Task\InstallTask;
 use Cake\Core\Configure;
-use Cake\Event\Event;
-use Cake\Http\Exception\InternalErrorException;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
+use Cake\TestSuite\ConsoleIntegrationTestTrait;
 
 class ResetInstanceController extends AppController
 {
+    use ConsoleIntegrationTestTrait;
+
     /**
      * Before filter
      *
-     * @param Event $event An Event instance
+     * @param \Cake\Event\EventInterface $event An Event instance
      * @return \Cake\Http\Response|null
      */
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
         if (Configure::read('debug') && Configure::read('passbolt.selenium.active')) {
             $this->Auth->allow('resetInstance');
@@ -49,19 +50,11 @@ class ResetInstanceController extends AppController
      */
     public function resetInstance($dataset = 'default')
     {
-        // Install job shell.
-        $job = new InstallTask();
-        $job->startup();
-        $job->params['data'] = $dataset;
-        $job->params['quick'] = 'true';
-        $job->params['quiet'] = 'true';
-        $job->params['no-admin'] = 'true';
-        $job->params['force'] = 'true';
+        // Install job command.
+        $this->exec('install --quick --quiet --no-admin --force --data ' . $dataset);
 
-        $result = $job->main();
-        if ($result === false) {
-            throw new InternalErrorException(__('Something went wrong. Check the server logs.'));
-        }
+        $this->assertExitSuccess(__('Something went wrong. Check the server logs.'));
+
         $this->viewBuilder()
             ->setLayout('ajax')
             ->setTemplatePath('Healthcheck')

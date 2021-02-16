@@ -24,7 +24,7 @@ class ConfigControllerTest extends AppIntegrationTestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         // delete any tmp config files if any
         if (file_exists(ConfigController::EXTRA_CONFIG_FILE)) {
