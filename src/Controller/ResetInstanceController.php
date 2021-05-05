@@ -33,7 +33,7 @@ class ResetInstanceController extends AppController
     public function beforeFilter(EventInterface $event)
     {
         if (Configure::read('debug') && Configure::read('passbolt.selenium.active')) {
-            $this->Auth->allow('resetInstance');
+            $this->Authentication->allowUnauthenticated(['resetInstance']);
         } else {
             throw new NotFoundException();
         };
@@ -51,9 +51,8 @@ class ResetInstanceController extends AppController
     public function resetInstance($dataset = 'default')
     {
         // Install job command.
-        $this->exec('install --quick --quiet --no-admin --force --data ' . $dataset);
-
-        $this->assertExitSuccess(__('Something went wrong. Check the server logs.'));
+        $this->useCommandRunner();
+        $this->exec('passbolt install --quick --quiet --no-admin --force --data ' . $dataset);
 
         $this->viewBuilder()
             ->setLayout('ajax')
