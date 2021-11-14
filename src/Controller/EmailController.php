@@ -51,6 +51,9 @@ class EmailController extends AppController
      */
     public function showLastEmail($username)
     {
+        // Initiate table to load avatar size configuration
+        TableRegistry::getTableLocator()->get('Avatars');
+
         // If username is not an email, throw an error
         if (!Validation::email($username)) {
             throw new HttpException(__('Username not correct'));
