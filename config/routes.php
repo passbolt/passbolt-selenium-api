@@ -12,15 +12,16 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.0.0
  */
-use Cake\Routing\Router;
+
+/** @var \Cake\Routing\RouteBuilder $routes */
 
 /**
  * Selenium tests routes
  */
-Router::plugin('PassboltSeleniumApi', ['path' => '/seleniumtests'], function ($routes) {
+$routes->plugin('PassboltSeleniumApi', ['path' => '/seleniumtests'], function ($routes) {
     $routes->setExtensions(['json']);
 
-    $routes->connect('/resetInstance/:dataset', ['controller' => 'ResetInstance', 'action' => 'resetInstance'])
+    $routes->connect('/resetInstance/{dataset}', ['controller' => 'ResetInstance', 'action' => 'resetInstance'])
         ->setPass(['dataset'])
         ->setMethods(['GET']);
 
@@ -45,12 +46,12 @@ Router::plugin('PassboltSeleniumApi', ['path' => '/seleniumtests'], function ($r
     $routes->connect('/error500', ['controller' => 'SimulateError', 'action' => 'error500'])
         ->setMethods(['GET']);
 
-    $routes->connect('/showlastemail/:username', ['controller' => 'Email', 'action' => 'showLastEmail'])
+    $routes->connect('/showlastemail/{username}', ['controller' => 'Email', 'action' => 'showLastEmail'])
         ->setPass(['username'])
         ->setMethods(['GET']);
 
     // Legacy v1 backward compatibility routes
-    $routes->connect('/showLastEmail/:username', ['controller' => 'Email', 'action' => 'showLastEmail'])
+    $routes->connect('/showLastEmail/{username}', ['controller' => 'Email', 'action' => 'showLastEmail'])
         ->setPass(['username'])
         ->setMethods(['GET']);
 });

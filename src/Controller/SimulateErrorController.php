@@ -24,10 +24,7 @@ use Cake\Http\Exception\NotFoundException;
 class SimulateErrorController extends AppController
 {
     /**
-     * Before filter
-     *
-     * @param \Cake\Event\EventInterface $event An Event instance
-     * @return \Cake\Http\Response|null
+     * @inheritDoc
      */
     public function beforeFilter(EventInterface $event)
     {
