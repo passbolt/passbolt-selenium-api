@@ -25,10 +25,7 @@ use Cake\Validation\Validation;
 class EmailController extends AppController
 {
     /**
-     * Before filter
-     *
-     * @param \Cake\Event\EventInterface $event An Event instance
-     * @return \Cake\Http\Response|null
+     * @inheritDoc
      */
     public function beforeFilter(EventInterface $event)
     {

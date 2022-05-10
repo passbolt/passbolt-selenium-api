@@ -12,7 +12,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.0.0
  */
-namespace PassboltSeleniumApi\Test\TestCase\Controller\SeleniumTests;
+namespace PassboltSeleniumApi\Test\TestCase\Controller;
 
 use App\Test\Lib\AppIntegrationTestCase;
 use PassboltSeleniumApi\Controller\ConfigController;

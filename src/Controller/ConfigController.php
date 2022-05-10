@@ -30,10 +30,7 @@ class ConfigController extends AppController
     const EXTRA_CONFIG_FILE = self::EXTRA_CONFIG_PATH . self::EXTRA_CONFIG_FILENAME;
 
     /**
-     * Before filter
-     *
-     * @param \Cake\Event\EventInterface $event An Event instance
-     * @return \Cake\Http\Response|null
+     * @inheritDoc
      */
     public function beforeFilter(EventInterface $event)
     {
