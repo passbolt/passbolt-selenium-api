@@ -66,10 +66,16 @@ class EmailController extends AppController
             throw new HttpException(__('The username does not exist.'));
         }
         $EmailQueue = TableRegistry::getTableLocator()->get('EmailQueue.EmailQueue');
-        $email = $EmailQueue->find('all')
+        $emailQuery = $EmailQueue->find('all')
             ->where(['email' => $username])
-            ->order(['created' => 'DESC'])
-            ->first();
+            ->order(['created' => 'DESC']);
+
+        $emailType = $this->request->getQueryParams()["type"] ?? null;
+        if (!is_null($emailType)) {
+            $emailQuery->where(['template' => $emailType]);
+        }
+
+        $email = $emailQuery->first();
         if (empty($email)) {
             throw new HttpException(__('No email was sent to this user.'));
         }
