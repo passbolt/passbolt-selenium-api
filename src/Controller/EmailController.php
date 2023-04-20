@@ -70,7 +70,7 @@ class EmailController extends AppController
             ->where(['email' => $username])
             ->order(['created' => 'DESC']);
 
-        $emailType = $this->request->getQueryParams()["type"] ?? null;
+        $emailType = $this->getEmailType();
         if (!is_null($emailType)) {
             $emailQuery->where(['template' => $emailType]);
         }
@@ -90,5 +90,23 @@ class EmailController extends AppController
             ->setLayoutPath("email/$format")
             ->setTemplate($email->template)
             ->setTemplatePath("email/$format");
+    }
+
+    /**
+     * Returns a validated `has-type` filter set in the query parameters of the request if any.
+     * @return string|null
+     */
+    private function getEmailType() {
+        $filter = $this->request->getQuery('filter');
+        if (is_null($filter)) {
+            return null;
+        }
+
+        $hasType = $filter['has-type'];
+        if (empty($hasType) || !is_string($hasType)) {
+            return null;
+        }
+
+        return $hasType;
     }
 }
