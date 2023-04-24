@@ -98,7 +98,7 @@ class EmailController extends AppController
      */
     private function getEmailType() {
         $filter = $this->request->getQuery('filter');
-        if (is_null($filter)) {
+        if (is_null($filter) || !is_array($filter)) {
             return null;
         }
 
