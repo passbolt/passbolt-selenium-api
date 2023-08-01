@@ -66,10 +66,16 @@ class EmailController extends AppController
             throw new HttpException(__('The username does not exist.'));
         }
         $EmailQueue = TableRegistry::getTableLocator()->get('EmailQueue.EmailQueue');
-        $email = $EmailQueue->find('all')
+        $emailQuery = $EmailQueue->find('all')
             ->where(['email' => $username])
-            ->order(['created' => 'DESC'])
-            ->first();
+            ->order(['created' => 'DESC']);
+
+        $emailType = $this->getEmailType();
+        if (!is_null($emailType)) {
+            $emailQuery->where(['template' => $emailType]);
+        }
+
+        $email = $emailQuery->first();
         if (empty($email)) {
             throw new HttpException(__('No email was sent to this user.'));
         }
@@ -84,5 +90,23 @@ class EmailController extends AppController
             ->setLayoutPath("email/$format")
             ->setTemplate($email->template)
             ->setTemplatePath("email/$format");
+    }
+
+    /**
+     * Returns a validated `has-type` filter set in the query parameters of the request if any.
+     * @return string|null
+     */
+    private function getEmailType() {
+        $filter = $this->request->getQuery('filter');
+        if (is_null($filter) || !is_array($filter)) {
+            return null;
+        }
+
+        $hasType = $filter['has-type'];
+        if (empty($hasType) || !is_string($hasType)) {
+            return null;
+        }
+
+        return $hasType;
     }
 }
