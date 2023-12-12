@@ -14,6 +14,7 @@
  */
 
 /** @var \Cake\Routing\RouteBuilder $routes */
+use Cake\Core\Configure;
 
 /**
  * Selenium tests routes
@@ -21,37 +22,35 @@
 $routes->plugin('PassboltSeleniumApi', ['path' => '/seleniumtests'], function ($routes) {
     $routes->setExtensions(['json']);
 
-    $routes->connect('/resetInstance/{dataset}', ['controller' => 'ResetInstance', 'action' => 'resetInstance'])
-        ->setPass(['dataset'])
-        ->setMethods(['GET']);
+    if (Configure::read('passbolt.plugins.selenium_api.security.endpoints.reset')) {
+        $routes->connect('/resetInstance/{dataset}', ['controller' => 'ResetInstance', 'action' => 'resetInstance'])
+            ->setPass(['dataset'])
+            ->setMethods(['GET']);
+    }
 
-    $routes->connect('/config', ['controller' => 'Config', 'action' => 'index'])
-        ->setMethods(['GET']);
+    if (Configure::read('passbolt.plugins.selenium_api.security.endpoints.error')) {
+        $routes->connect('/error400', ['controller' => 'SimulateError', 'action' => 'error400'])
+            ->setMethods(['GET']);
 
-    $routes->connect('/setExtraConfig', ['controller' => 'Config', 'action' => 'setExtraConfig'])
-        ->setMethods(['POST']);
+        $routes->connect('/error404', ['controller' => 'SimulateError', 'action' => 'error404'])
+            ->setMethods(['GET']);
 
-    $routes->connect('/resetExtraConfig', ['controller' => 'Config', 'action' => 'resetExtraConfig'])
-        ->setMethods(['GET']);
+        $routes->connect('/error403', ['controller' => 'SimulateError', 'action' => 'error403'])
+            ->setMethods(['GET']);
 
-    $routes->connect('/error400', ['controller' => 'SimulateError', 'action' => 'error400'])
-        ->setMethods(['GET']);
+        $routes->connect('/error500', ['controller' => 'SimulateError', 'action' => 'error500'])
+            ->setMethods(['GET']);
+    }
 
-    $routes->connect('/error404', ['controller' => 'SimulateError', 'action' => 'error404'])
-        ->setMethods(['GET']);
+    if (Configure::read('passbolt.plugins.selenium_api.security.endpoints.email')) {
+        $routes->connect('/showlastemail/{username}', ['controller' => 'Email', 'action' => 'showLastEmail'])
+            ->setPass(['username'])
+            ->setMethods(['GET']);
 
-    $routes->connect('/error403', ['controller' => 'SimulateError', 'action' => 'error403'])
-        ->setMethods(['GET']);
+        // Legacy v1 backward compatibility routes
+        $routes->connect('/showLastEmail/{username}', ['controller' => 'Email', 'action' => 'showLastEmail'])
+            ->setPass(['username'])
+            ->setMethods(['GET']);
+    }
 
-    $routes->connect('/error500', ['controller' => 'SimulateError', 'action' => 'error500'])
-        ->setMethods(['GET']);
-
-    $routes->connect('/showlastemail/{username}', ['controller' => 'Email', 'action' => 'showLastEmail'])
-        ->setPass(['username'])
-        ->setMethods(['GET']);
-
-    // Legacy v1 backward compatibility routes
-    $routes->connect('/showLastEmail/{username}', ['controller' => 'Email', 'action' => 'showLastEmail'])
-        ->setPass(['username'])
-        ->setMethods(['GET']);
 });
