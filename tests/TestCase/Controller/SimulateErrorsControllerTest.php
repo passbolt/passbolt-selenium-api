@@ -16,9 +16,34 @@ namespace PassboltSeleniumApi\Test\TestCase\Controller;
 
 use App\Test\Lib\AppIntegrationTestCase;
 use Cake\Core\Configure;
+use PassboltSeleniumApi\Controller\ConfigController;
 
 class SimulateErrorsControllerTest extends AppIntegrationTestCase
 {
+    /** @var bool error endpoint flag */
+    private $default;
+
+    /**
+     * @return void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->default = Configure::read('passbolt.plugins.selenium_api.security.endpoints.error');
+        Configure::write('passbolt.plugins.selenium_api.security.endpoints.error', true);
+    }
+
+    /**
+     * Clears the state used for tests.
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        Configure::write('passbolt.plugins.selenium_api.security.endpoints.error', $this->default);
+        parent::tearDown();
+    }
+
     public function testSimulateError404()
     {
         $this->getJson('/seleniumtests/error404.json');
