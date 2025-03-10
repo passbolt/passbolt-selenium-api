@@ -1,5 +1,6 @@
 composer.lock
 /vendor
+.phpunit.cache
 
 # IDE and editor specific files #
 #################################

@@ -14,12 +14,20 @@
  */
 namespace PassboltSeleniumApi\Test\TestCase\Controller;
 
-use App\Test\Lib\AppIntegrationTestCase;
 use Cake\Core\Configure;
-use PassboltSeleniumApi\Controller\ConfigController;
+use Cake\Core\Plugin;
+use Cake\TestSuite\IntegrationTestTrait;
+use Cake\TestSuite\TestCase;
+use PassboltSeleniumApi\Test\Utility\JsonRequestTrait;
 
-class SimulateErrorsControllerTest extends AppIntegrationTestCase
+/**
+ * @covers \PassboltSeleniumApi\Controller\SimulateErrorController
+ */
+class SimulateErrorsControllerTest extends TestCase
 {
+    use IntegrationTestTrait;
+    use JsonRequestTrait;
+
     /** @var bool error endpoint flag */
     private $default;
 
