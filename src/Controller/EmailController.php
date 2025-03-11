@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -33,7 +35,7 @@ class EmailController extends AppController
             $this->Authentication->allowUnauthenticated(['showLastEmail']);
         } else {
             throw new NotFoundException();
-        };
+        }
 
         return parent::beforeFilter($event);
     }
@@ -43,10 +45,10 @@ class EmailController extends AppController
      * Make sure you send email address URL encoded
      *
      * @param string $username the email of the user
-     * @throws HttpException
+     * @throws \Cake\Http\Exception\HttpException
      * @return void
      */
-    public function showLastEmail($username)
+    public function showLastEmail(string $username)
     {
         // Initiate table to load avatar size configuration
         TableRegistry::getTableLocator()->get('Avatars');
@@ -57,16 +59,14 @@ class EmailController extends AppController
         }
         // If username doesn't exist, we return an error.
         $Users = TableRegistry::getTableLocator()->get('Users');
-        $u = $Users->find('all')
-            ->where(['username' => $username])
-            ->first();
+        $u = $Users->find()->where(['username' => $username])->first();
 
         // If not found, we return an error.
         if (empty($u)) {
             throw new HttpException(__('The username does not exist.'));
         }
         $EmailQueue = TableRegistry::getTableLocator()->get('EmailQueue.EmailQueue');
-        $emailQuery = $EmailQueue->find('all')
+        $emailQuery = $EmailQueue->find()
             ->where(['email' => $username])
             ->order(['created' => 'DESC']);
 
@@ -94,9 +94,11 @@ class EmailController extends AppController
 
     /**
      * Returns a validated `has-type` filter set in the query parameters of the request if any.
+     *
      * @return string|null
      */
-    private function getEmailType() {
+    private function getEmailType()
+    {
         $filter = $this->request->getQuery('filter');
         if (is_null($filter) || !is_array($filter)) {
             return null;

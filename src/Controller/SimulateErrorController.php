@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -41,7 +43,7 @@ class SimulateErrorController extends AppController
     /**
      * Simulate error 404
      *
-     * @throws NotFoundException
+     * @throws \Cake\Http\Exception\NotFoundException
      * @return void
      */
     public function error404()
@@ -52,7 +54,7 @@ class SimulateErrorController extends AppController
     /**
      * Simulate error 403
      *
-     * @throws ForbiddenException
+     * @throws \Cake\Http\Exception\ForbiddenException
      * @return void
      */
     public function error403()
@@ -63,7 +65,7 @@ class SimulateErrorController extends AppController
     /**
      * Simulate error 400
      *
-     * @throws BadRequestException
+     * @throws \Cake\Http\Exception\BadRequestException
      * @return void
      */
     public function error400()
@@ -74,7 +76,7 @@ class SimulateErrorController extends AppController
     /**
      * Simulate error 500
      *
-     * @throws InternalErrorException
+     * @throws \Cake\Http\Exception\InternalErrorException
      * @return void
      */
     public function error500()

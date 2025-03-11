@@ -14,10 +14,13 @@ declare(strict_types=1);
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-namespace PassboltSeleniumApi;
+namespace TestApp\Controller;
 
-use Cake\Core\BasePlugin;
+use Cake\Controller\Controller;
 
-class PassboltSeleniumApiPlugin extends BasePlugin
+class UsersController extends Controller
 {
+    public function index(): void
+    {
+    }
 }

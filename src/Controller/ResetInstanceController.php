@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -33,7 +35,7 @@ class ResetInstanceController extends AppController
             $this->Authentication->allowUnauthenticated(['resetInstance']);
         } else {
             throw new NotFoundException();
-        };
+        }
 
         return parent::beforeFilter($event);
     }
@@ -45,7 +47,7 @@ class ResetInstanceController extends AppController
      * @param string $dataset data set name
      * @return void
      */
-    public function resetInstance($dataset = 'default')
+    public function resetInstance(string $dataset = 'default')
     {
         // Install job command.
         $this->useCommandRunner();

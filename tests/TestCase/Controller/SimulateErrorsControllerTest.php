@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -15,7 +17,6 @@
 namespace PassboltSeleniumApi\Test\TestCase\Controller;
 
 use Cake\Core\Configure;
-use Cake\Core\Plugin;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 use PassboltSeleniumApi\Test\Utility\JsonRequestTrait;
@@ -28,7 +29,9 @@ class SimulateErrorsControllerTest extends TestCase
     use IntegrationTestTrait;
     use JsonRequestTrait;
 
-    /** @var bool error endpoint flag */
+    /**
+     * @var bool error endpoint flag
+     */
     private $default;
 
     /**

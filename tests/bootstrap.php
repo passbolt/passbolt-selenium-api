@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -14,10 +15,10 @@ declare(strict_types=1);
  * @since         5.0.0
  */
 use Cake\Cache\Cache;
+use Cake\Chronos\Chronos;
 use Cake\Core\Configure;
-use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
-use PassboltSeleniumApi\PassboltSeleniumApiPlugin;
+use TestApp\Controller\AppController;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -38,6 +39,7 @@ define('WWW_ROOT', TEST_APP_DIR . 'webroot' . DS);
 define('CACHE', TMP);
 define('LOGS', TMP);
 
+require_once CAKE . 'functions.php';
 require_once CORE_PATH . 'config/bootstrap.php';
 
 date_default_timezone_set('UTC');
@@ -94,4 +96,11 @@ $config = [
 ];
 ConnectionManager::setConfig('test', $config);
 
-class_alias(\TestApp\Controller\AppController::class, 'App\Controller\AppController');
+class_alias(AppController::class, 'App\Controller\AppController');
+
+Chronos::setTestNow(Chronos::now());
+
+// Fixate sessionid early on, as php7.2+
+// does not allow the sessionid to be set after stdout
+// has been written to.
+session_id('cli');
