@@ -16,11 +16,17 @@ declare(strict_types=1);
  */
 namespace PassboltSeleniumApi\Controller;
 
+use App\Command\InstallCommand;
+use App\Middleware\ContainerInjectorMiddleware;
+use App\Service\Subscriptions\DefaultSubscriptionCheckInCommandService;
 use App\Controller\AppController;
+use App\Service\Command\ProcessUserService;
+use App\Service\Healthcheck\HealthcheckServiceCollector;
+use Cake\Console\ConsoleIo;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
-use Cake\TestSuite\ConsoleIntegrationTestTrait;
+use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
 
 class ResetInstanceController extends AppController
 {
@@ -49,15 +55,34 @@ class ResetInstanceController extends AppController
      */
     public function resetInstance(string $dataset = 'default')
     {
-        // Install job command.
-        $this->useCommandRunner();
-        $this->exec('passbolt install --quick --quiet --no-admin --force --data ' . $dataset);
+        $container = $this->getRequest()->getAttribute(ContainerInjectorMiddleware::CONTAINER_ATTRIBUTE);
+        $registerUserCommand = new InstallCommand(
+            new ProcessUserService(),
+            new DefaultSubscriptionCheckInCommandService(),
+            $container->get(HealthcheckServiceCollector::class)
+        );
+
+        $options = [
+            '--quick',
+            '--quiet',
+            '--no-admin',
+            '--force',
+            '--data', $dataset,
+        ];
+        $io = new ConsoleIo();
+        $result = $registerUserCommand->run($options, $io);
 
         $this->viewBuilder()
             ->setLayout('ajax')
             ->setTemplatePath('Healthcheck')
             ->setTemplate('status');
-        $msg = __('Instance reset completed.');
-        $this->success($msg, $msg);
+
+        if ($result === 0) {
+            $msg = __('Instance reset completed.');
+            $this->success($msg, $msg);
+        } else {
+            $msg = __('Instance reset failed.');
+            $this->error($msg, $msg);
+        }
     }
 }
