@@ -19,7 +19,7 @@ namespace PassboltSeleniumApi\Controller;
 use App\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
-use Cake\Http\Exception\HttpException;
+use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validation;
@@ -55,20 +55,21 @@ class EmailController extends AppController
 
         // If username is not an email, throw an error
         if (!Validation::email($username)) {
-            throw new HttpException(__('Username not correct'));
+            throw new BadRequestException(__('Username not correct'));
         }
+
         // If username doesn't exist, we return an error.
         $Users = TableRegistry::getTableLocator()->get('Users');
         $u = $Users->find()->where(['username' => $username])->first();
-
         // If not found, we return an error.
         if (empty($u)) {
-            throw new HttpException(__('The username does not exist.'));
+            throw new BadRequestException(__('The username does not exist.'));
         }
+
         $EmailQueue = TableRegistry::getTableLocator()->get('EmailQueue.EmailQueue');
         $emailQuery = $EmailQueue->find()
             ->where(['email' => $username])
-            ->order(['created' => 'DESC']);
+            ->orderByDesc('created');
 
         $emailType = $this->getEmailType();
         if (!is_null($emailType)) {
@@ -77,7 +78,7 @@ class EmailController extends AppController
 
         $email = $emailQuery->first();
         if (empty($email)) {
-            throw new HttpException(__('No email was sent to this user.'));
+            throw new BadRequestException(__('No email was sent to this user.'));
         }
 
         // Get template, template vars, subject and format
@@ -97,10 +98,10 @@ class EmailController extends AppController
      *
      * @return string|null
      */
-    private function getEmailType()
+    private function getEmailType(): ?string
     {
         $filter = $this->request->getQuery('filter');
-        if (is_null($filter) || !is_array($filter)) {
+        if (!is_array($filter)) {
             return null;
         }
 
